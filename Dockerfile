@@ -35,7 +35,7 @@ RUN apt update && \
     cd /var/www/html && \
     chown -R www-data:www-data . && \
     gosu www-data composer install && \
-    curl -fsLo /tmp/mathjax.sh https://hub.taocloud.org/resources/taohub-articles/articles/third-party/MathJax_Install_TAO_3x.sh && \
+    curl -fsLo /tmp/mathjax.sh https://hub.taotesting.com/resources/taohub-articles/articles/third-party/MathJax_Install_TAO_3x.sh && \
     gosu www-data bash /tmp/mathjax.sh && \
 # tweaks
     sed -i 's/^\$installDetails =/if(tao_install_utils_System::isTAOInstalled()) die();require "datacheck.php";\$installDetails =/' /var/www/html/tao/scripts/taoInstall.php && \
