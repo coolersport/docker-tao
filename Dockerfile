@@ -30,6 +30,8 @@ RUN apt update && \
     docker-php-ext-install opcache && \
     docker-php-ext-install pdo_mysql && \
     ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
 # install tao
     git clone https://github.com/oat-sa/package-tao.git /var/www/html && \
     cd /var/www/html && \
