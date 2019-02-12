@@ -6,6 +6,8 @@ if [[ "$@" = *bash* ]]; then
   exit 0
 fi
 
+[[ -f /pre-entrypoint.sh ]] && . /pre-entrypoint.sh
+
 chown -R www-data:www-data /var/www/html/{config,tao/views/locales,data}
 
 for (( i=1; i<=${TIMEOUT:-10}; i++ )); do nc -zw1 ${DB_HOST?} ${DB_PORT:-3306} && break || sleep 1; done
@@ -37,5 +39,7 @@ sed -i "s/^ *'host' => '[^']*'/'host' => '${DB_HOST?}'/" /var/www/html/config/ge
 sed -i "s/^ *'dbname' => '[^']*'/'dbname' => '${DB_NAME?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
 sed -i "s/^ *'user' => '[^']*'/'user' => '${DB_USER?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
 sed -i "s/^ *'password' => '[^']*'/'password' => '${DB_PASS?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
+
+[[ -f /post-entrypoint.sh ]] && . /post-entrypoint.sh
 
 exec "$@"
