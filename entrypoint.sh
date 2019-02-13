@@ -40,6 +40,10 @@ sed -i "s/^ *'dbname' => '[^']*'/'dbname' => '${DB_NAME?}'/" /var/www/html/confi
 sed -i "s/^ *'user' => '[^']*'/'user' => '${DB_USER?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
 sed -i "s/^ *'password' => '[^']*'/'password' => '${DB_PASS?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
 
+SERVERNAME=${ROOT_URL#*//}
+SERVERNAME=${SERVERNAME%%/*}
+echo "ServerName $SERVERNAME" > /etc/apache2/sites-enabled/fqdn.conf
+
 [[ -f /post-entrypoint.sh ]] && . /post-entrypoint.sh
 
 exec "$@"
