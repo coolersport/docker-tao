@@ -9,9 +9,6 @@ RUN apt update && \
 # run on non-privilege ports
     sed -i 's/Listen 80$/Listen 8080/g' /etc/apache2/ports.conf && \
     sed -i 's/Listen 443$/Listen 8443/g' /etc/apache2/ports.conf && \
-    rm -rf /var/log/apache2/* && \
-    touch /var/log/apache2/access.log /var/log/apache2/error.log /var/log/apache2/other_vhosts_access.log && \
-    chown -R www-data:www-data /var/log/apache2 && \
 # install gosu
     dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
     curl -fsLo /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$dpkgArch" && \
@@ -52,4 +49,4 @@ RUN apt update && \
 
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["gosu","www-data","apache2-foreground"]
+CMD ["apache2-foreground"]
