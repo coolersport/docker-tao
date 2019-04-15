@@ -26,19 +26,23 @@ gosu www-data php tao/scripts/taoInstall.php \
 --user_pass ${BOOSTRAP_ADMIN_PASSWORD:-someTaoP4sss} \
 -e taoCe -v
 
-sed -i "s/define('LOCAL_NAMESPACE','[^']*');/define('LOCAL_NAMESPACE','${LOCAL_NAMESPACE?}');/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('ROOT_URL','[^']*');/define('ROOT_URL','${ROOT_URL?}');/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('GENERIS_INSTANCE_NAME','[^']*');/define('GENERIS_INSTANCE_NAME','${INSTANCE_NAME:-tao}');/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('GENERIS_SESSION_NAME','[^']*');/define('GENERIS_SESSION_NAME','${SESSION_NAME:-tao}');/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('DEFAULT_LANG','[^']*');/define('DEFAULT_LANG','${DEFAULT_LANG:-en-US}');/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('DEFAULT_ANONYMOUS_INTERFACE_LANG','[^']*');/define('DEFAULT_ANONYMOUS_INTERFACE_LANG','${DEFAULT_ANONYMOUS_INTERFACE_LANG:-en-US}');/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('DEBUG_MODE', [a-z]*);/define('DEBUG_MODE', ${DEBUG_MODE:-false});/" /var/www/html/config/generis.conf.php &>/dev/null
-sed -i "s/define('TIME_ZONE','[^']*');/define('TIME_ZONE','${TIME_ZONE:-UTC}');/" /var/www/html/config/generis.conf.php &>/dev/null
+escapeRegex() {
+  sed 's/[][/\\*.$^{}&|+]/\\&/g' <<<"$1" | sed "s/'/\\\\\\\'/g"
+}
 
-sed -i "s/^ *'host' => '[^']*'/'host' => '${DB_HOST?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
-sed -i "s/^ *'dbname' => '[^']*'/'dbname' => '${DB_NAME?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
-sed -i "s/^ *'user' => '[^']*'/'user' => '${DB_USER?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
-sed -i "s/^ *'password' => '[^']*'/'password' => '${DB_PASS?}'/" /var/www/html/config/generis/persistences.conf.php &>/dev/null
+sed -i "s/define('LOCAL_NAMESPACE','[^']*');/define('LOCAL_NAMESPACE','$(escapeRegex ${LOCAL_NAMESPACE?})');/" /var/www/html/config/generis.conf.php
+sed -i "s/define('ROOT_URL','[^']*');/define('ROOT_URL','$(escapeRegex ${ROOT_URL?})');/" /var/www/html/config/generis.conf.php
+sed -i "s/define('GENERIS_INSTANCE_NAME','[^']*');/define('GENERIS_INSTANCE_NAME','$(escapeRegex ${INSTANCE_NAME:-tao})');/" /var/www/html/config/generis.conf.php
+sed -i "s/define('GENERIS_SESSION_NAME','[^']*');/define('GENERIS_SESSION_NAME','$(escapeRegex ${SESSION_NAME:-tao})');/" /var/www/html/config/generis.conf.php
+sed -i "s/define('DEFAULT_LANG','[^']*');/define('DEFAULT_LANG','$(escapeRegex ${DEFAULT_LANG:-en-US})');/" /var/www/html/config/generis.conf.php
+sed -i "s/define('DEFAULT_ANONYMOUS_INTERFACE_LANG','[^']*');/define('DEFAULT_ANONYMOUS_INTERFACE_LANG','$(escapeRegex ${DEFAULT_ANONYMOUS_INTERFACE_LANG:-en-US})');/" /var/www/html/config/generis.conf.php
+sed -i "s/define('DEBUG_MODE', [a-z]*);/define('DEBUG_MODE', ${DEBUG_MODE:-false});/" /var/www/html/config/generis.conf.php
+sed -i "s/define('TIME_ZONE','[^']*');/define('TIME_ZONE','$(escapeRegex ${TIME_ZONE:-UTC})');/" /var/www/html/config/generis.conf.php
+
+sed -i "s/^ *'host' => '[^']*'/'host' => '$(escapeRegex ${DB_HOST?})'/" /var/www/html/config/generis/persistences.conf.php
+sed -i "s/^ *'dbname' => '[^']*'/'dbname' => '$(escapeRegex ${DB_NAME?})'/" /var/www/html/config/generis/persistences.conf.php
+sed -i "s/^ *'user' => '[^']*'/'user' => '$(escapeRegex ${DB_USER?})'/" /var/www/html/config/generis/persistences.conf.php
+sed -i "s/^ *'password' => '[^']*'/'password' => '$(escapeRegex ${DB_PASS?})'/" /var/www/html/config/generis/persistences.conf.php
 
 SERVERNAME=${ROOT_URL#*//}
 SERVERNAME=${SERVERNAME%%/*}
