@@ -14,6 +14,10 @@ for (( i=1; i<=${TIMEOUT:-10}; i++ )); do nc -zw1 ${DB_HOST?} ${DB_PORT:-3306} &
 
 LOCAL_NAMESPACE=${LOCAL_NAMESPACE:-http://namespace/local.rdf}
 
+if [[ -n "$ROOT_URL" ]]; then
+  ROOT_URL=`sed 's/[/ ]*$//g' <<<"$ROOT_URL"`/
+fi
+
 gosu www-data php tao/scripts/taoInstall.php \
 --db_driver pdo_mysql \
 --db_host ${DB_HOST?} \
