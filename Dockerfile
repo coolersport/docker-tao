@@ -50,7 +50,6 @@ RUN apt update && \
     apt remove -y git && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN apt update && apt install -y vim 
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gosu","www-data","apache2-foreground"]
