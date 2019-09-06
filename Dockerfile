@@ -40,6 +40,8 @@ RUN apt update && \
     sed -i 's/^\$installDetails =/if(tao_install_utils_System::isTAOInstalled()) die();require "datacheck.php";\$installDetails =/' /var/www/html/tao/scripts/taoInstall.php && \
     mv /datacheck.php /var/www/html/tao/scripts && \
     chown www-data:www-data /var/www/html/tao/scripts/datacheck.php && \
+# change MyISAM to InnoDB
+    for f in `grep -lr MyISAM /var/www/html/*`; do sed -i 's/MyISAM/InnoDB/g' $f; done && \
 # entrypoint
     chmod +x /entrypoint.sh && \
 # cleanup
